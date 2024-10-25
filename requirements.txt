@@ -1,0 +1,9 @@
+Django>=4.0,<5.0
+djangorestframework
+psycopg2-binary
+requests
+matplotlib
+plotly
+scikit-learn
+gunicorn
+django-environ

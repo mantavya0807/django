@@ -1,0 +1,51 @@
+<!-- templates/reports.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Reports - FinanceApp{% endblock %}
+
+{% block content %}
+<h2>Generate Reports</h2>
+
+<!-- Backtest Reports -->
+<div class="card mb-4">
+    <div class="card-header">
+        Backtest Reports
+    </div>
+    <div class="card-body">
+        <h5>Download PDF Report</h5>
+        <form method="get" action="{% url 'backtest-report-pdf' backtest_id=0 %}">
+            <div class="mb-3">
+                <label for="backtest_id_pdf" class="form-label">Backtest ID</label>
+                <input type="number" class="form-control" id="backtest_id_pdf" name="backtest_id" placeholder="Enter Backtest ID" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Download PDF Report</button>
+        </form>
+        <h5 class="mt-4">Download JSON Report</h5>
+        <form method="get" action="{% url 'backtest-report-json' backtest_id=0 %}">
+            <div class="mb-3">
+                <label for="backtest_id_json" class="form-label">Backtest ID</label>
+                <input type="number" class="form-control" id="backtest_id_json" name="backtest_id" placeholder="Enter Backtest ID" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Download JSON Report</button>
+        </form>
+    </div>
+</div>
+
+<!-- Prediction Reports -->
+<div class="card">
+    <div class="card-header">
+        Prediction Reports
+    </div>
+    <div class="card-body">
+        <h5>Download Prediction PDF Report</h5>
+        <form method="get" action="{% url 'prediction-report-pdf' symbol='AAPL' %}">
+            <div class="mb-3">
+                <label for="prediction_symbol_pdf" class="form-label">Stock Symbol</label>
+                <input type="text" class="form-control" id="prediction_symbol_pdf" name="symbol" placeholder="e.g., AAPL" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Download PDF Report</button>
+        </form>
+    </div>
+</div>
+{% endblock %}

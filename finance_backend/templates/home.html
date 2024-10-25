@@ -1,0 +1,15 @@
+<!-- templates/home.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Home - FinanceApp{% endblock %}
+
+{% block content %}
+<div class="jumbotron text-center">
+    <h1 class="display-4">Welcome to FinanceApp</h1>
+    <p class="lead">Analyze stock data, perform backtesting, make predictions, and generate insightful reports.</p>
+    <hr class="my-4">
+    <p>Get started by fetching stock data or exploring other features.</p>
+    <a class="btn btn-primary btn-lg" href="{% url 'fetch_stock_data' %}" role="button">Fetch Stock Data</a>
+</div>
+{% endblock %}

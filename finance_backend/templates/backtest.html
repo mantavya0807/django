@@ -1,0 +1,25 @@
+<!-- templates/backtest.html -->
+
+{% extends 'base.html' %}
+
+{% block title %}Backtest - FinanceApp{% endblock %}
+
+{% block content %}
+<h2>Backtesting</h2>
+<form method="post" action="{% url 'backtest-create' %}">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Run Backtest</button>
+</form>
+
+{% if backtest_result %}
+    <h3 class="mt-5">Backtest Results for {{ backtest.symbol }}</h3>
+    <ul class="list-group">
+        <li class="list-group-item"><strong>Total Return:</strong> {{ backtest_result.total_return }}%</li>
+        <li class="list-group-item"><strong>Max Drawdown:</strong> {{ backtest_result.max_drawdown }}%</li>
+        <li class="list-group-item"><strong>Trades Executed:</strong> {{ backtest_result.trades_executed }}</li>
+    </ul>
+    <a href="{% url 'backtest-report-pdf' backtest.id %}" class="btn btn-secondary mt-3">Download PDF Report</a>
+    <a href="{% url 'backtest-report-json' backtest.id %}" class="btn btn-secondary mt-3">Download JSON Report</a>
+{% endif %}
+{% endblock %}
