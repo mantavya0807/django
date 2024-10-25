@@ -31,7 +31,7 @@ SECRET_KEY = 'django-insecure-)0s)z9)&@g6$!!x&fyn5@dtkogiknn%w9%()p-5@+eng&q5axc
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -91,6 +91,7 @@ DATABASES = {
 }
 
 DATABASES['default'].setdefault('ENGINE', 'django.db.backends.postgresql')
+
 
 ALPHA_VANTAGE_API_KEY = '4MZ2W96LP8WE03H4'
 
