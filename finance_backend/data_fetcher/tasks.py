@@ -1,19 +1,17 @@
 # data_fetcher/tasks.py
-
 import requests
-from celery import shared_task
 from django.conf import settings
 from .models import StockPrice
 from datetime import datetime, timedelta
 import time
 from django.db import IntegrityError
 
-@shared_task
+
 def fetch_stock_data(symbol='AAPL'):
     api_key = settings.ALPHA_VANTAGE_API_KEY
     url = 'https://www.alphavantage.co/query'
     params = {
-        'function': 'TIME_SERIES_DAILY_ADJUSTED',
+        'function': 'TIME_SERIES_DAILY',
         'symbol': symbol,
         'outputsize': 'full',
         'apikey': api_key,
@@ -24,9 +22,12 @@ def fetch_stock_data(symbol='AAPL'):
         response.raise_for_status()
         data = response.json()
 
-        time_series = data.get('Time Series (Daily)', {})
-        if not time_series:
-            raise ValueError("Invalid data format from Alpha Vantage")
+        if 'Error Message' in data:
+            raise ValueError(f"API Error: {data['Error Message']}")
+        elif 'Time Series (Daily)' not in data:
+            raise ValueError("Unexpected response structure from Alpha Vantage")
+
+        time_series = data['Time Series (Daily)']
 
         bulk_create = []
         for date_str, metrics in time_series.items():
@@ -35,7 +36,7 @@ def fetch_stock_data(symbol='AAPL'):
             high_price = float(metrics['2. high'])
             low_price = float(metrics['3. low'])
             close_price = float(metrics['4. close'])
-            volume = int(metrics['6. volume'])
+            volume = int(metrics['5. volume'])
 
             stock_price = StockPrice(
                 symbol=symbol,

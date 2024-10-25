@@ -1,8 +1,5 @@
-from django.shortcuts import render
-
-# Create your views here.
 # backtesting/views.py
-
+from django.shortcuts import render
 from rest_framework import generics, status
 from rest_framework.response import Response
 from .models import Backtest, BacktestResult
@@ -20,12 +17,15 @@ class BacktestCreateView(generics.CreateAPIView):
         try:
             result = backtest.result
             result_serializer = BacktestResultSerializer(result)
-            return Response({
+            
+            # Render the result to an HTML template instead of returning a JSON response
+            return render(request, 'backtest_result.html', {
                 'backtest': serializer.data,
                 'result': result_serializer.data
-            }, status=status.HTTP_201_CREATED)
+            })
         except BacktestResult.DoesNotExist:
-            return Response({
+            # Even if result is not available, render the template with backtest data
+            return render(request, 'backtest_result.html', {
                 'backtest': serializer.data,
                 'result': None
-            }, status=status.HTTP_201_CREATED)
+            })

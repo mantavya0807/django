@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block title %}Fetch Stock Data{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1>Fetch Stock Data</h1>
+
+        <form method="post" action="{% url 'frontend:fetch_stock' %}">
+            {% csrf_token %}
+            <div class="mb-3">
+                <label for="symbol" class="form-label">Stock Symbol</label>
+                <input type="text" class="form-control" id="symbol" name="symbol" placeholder="AAPL" value="{{ symbol }}">
+            </div>
+            <button type="submit" class="btn btn-primary">Fetch Data</button>
+        </form>
+
+        {% if message %}
+            <div class="alert alert-success mt-3" role="alert">
+                {{ message }}
+            </div>
+        {% endif %}
+
+        {% if error %}
+            <div class="alert alert-danger mt-3" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}

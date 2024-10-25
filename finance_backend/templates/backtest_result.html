@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}Backtest Result - FinanceApp{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="my-4">Backtest Result</h1>
+
+    <div class="row">
+        <!-- Backtest Details on the left -->
+        <div class="col-md-6">
+            <h2>Backtest Details</h2>
+            <table class="table table-bordered">
+                <tbody>
+                    <tr>
+                        <th>ID</th>
+                        <td>{{ backtest.id }}</td>
+                    </tr>
+                    <tr>
+                        <th>Initial Investment</th>
+                        <td>${{ backtest.initial_investment }}</td>
+                    </tr>
+                    <tr>
+                        <th>Buy Moving Average</th>
+                        <td>{{ backtest.buy_moving_average }}</td>
+                    </tr>
+                    <tr>
+                        <th>Sell Moving Average</th>
+                        <td>{{ backtest.sell_moving_average }}</td>
+                    </tr>
+                    <tr>
+                        <th>Symbol</th>
+                        <td>{{ backtest.symbol }}</td>
+                    </tr>
+                    <tr>
+                        <th>Created At</th>
+                        <td>{{ backtest.created_at }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Backtest Result on the right -->
+        <div class="col-md-6">
+            {% if result %}
+            <h2>Backtest Result</h2>
+            <table class="table table-striped">
+                <tbody>
+                    <tr>
+                        <th>Total Return</th>
+                        <td>{{ result.total_return }}%</td>
+                    </tr>
+                    <tr>
+                        <th>Max Drawdown</th>
+                        <td>{{ result.max_drawdown }}%</td>
+                    </tr>
+                    <tr>
+                        <th>Trades Executed</th>
+                        <td>{{ result.trades_executed }}</td>
+                    </tr>
+                    <tr>
+                        <th>Generated At</th>
+                        <td>{{ result.generated_at }}</td>
+                    </tr>
+                </tbody>
+            </table>
+            {% else %}
+            <div class="alert alert-warning mt-4" role="alert">
+                No result available yet for this backtest.
+            </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,5 +1,3 @@
-<!-- templates/reports.html -->
-
 {% extends 'base.html' %}
 
 {% block title %}Reports - FinanceApp{% endblock %}
@@ -13,22 +11,69 @@
         Backtest Reports
     </div>
     <div class="card-body">
-        <h5>Download PDF Report</h5>
-        <form method="get" action="{% url 'backtest-report-pdf' backtest_id=0 %}">
-            <div class="mb-3">
-                <label for="backtest_id_pdf" class="form-label">Backtest ID</label>
-                <input type="number" class="form-control" id="backtest_id_pdf" name="backtest_id" placeholder="Enter Backtest ID" required>
+        <!-- Search form -->
+        <form method="GET" action="">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="backtest_search" placeholder="Search Backtests" value="{{ request.GET.backtest_search }}">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
             </div>
-            <button type="submit" class="btn btn-primary">Download PDF Report</button>
         </form>
-        <h5 class="mt-4">Download JSON Report</h5>
-        <form method="get" action="{% url 'backtest-report-json' backtest_id=0 %}">
-            <div class="mb-3">
-                <label for="backtest_id_json" class="form-label">Backtest ID</label>
-                <input type="number" class="form-control" id="backtest_id_json" name="backtest_id" placeholder="Enter Backtest ID" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Download JSON Report</button>
-        </form>
+
+        <!-- Display a table of backtests -->
+        <h5>Available Backtests</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Symbol</th>
+                    <th>Initial Investment</th>
+                    <th>Buy Moving Average</th>
+                    <th>Sell Moving Average</th>
+                    <th>Created At</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for backtest in backtests %}
+                <tr>
+                    <td>{{ backtest.id }}</td>
+                    <td>{{ backtest.symbol }}</td>
+                    <td>{{ backtest.initial_investment }}</td>
+                    <td>{{ backtest.buy_moving_average }}</td>
+                    <td>{{ backtest.sell_moving_average }}</td>
+                    <td>{{ backtest.created_at }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButton{{ backtest.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton{{ backtest.id }}">
+                                <li><a class="dropdown-item" href="/report/backtest/{{ backtest.id }}/pdf/">Download PDF</a></li>
+                                <li><a class="dropdown-item" href="/report/backtest/{{ backtest.id }}/json/">Download JSON</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="7">No backtests found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination for backtests -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if backtests.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ backtests.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                <li class="page-item disabled"><span class="page-link">Page {{ backtests.number }} of {{ backtests.paginator.num_pages }}</span></li>
+                {% if backtests.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ backtests.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 </div>
 
@@ -38,14 +83,67 @@
         Prediction Reports
     </div>
     <div class="card-body">
-        <h5>Download Prediction PDF Report</h5>
-        <form method="get" action="{% url 'prediction-report-pdf' symbol='AAPL' %}">
-            <div class="mb-3">
-                <label for="prediction_symbol_pdf" class="form-label">Stock Symbol</label>
-                <input type="text" class="form-control" id="prediction_symbol_pdf" name="symbol" placeholder="e.g., AAPL" required>
+        <!-- Search form -->
+        <form method="GET" action="">
+            <div class="input-group mb-3">
+                <input type="text" class="form-control" name="prediction_search" placeholder="Search Predictions" value="{{ request.GET.prediction_search }}">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
             </div>
-            <button type="submit" class="btn btn-primary">Download PDF Report</button>
         </form>
+
+        <!-- Display a table of predictions -->
+        <h5>Available Predictions</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Symbol</th>
+                    <th>Prediction Date</th>
+                    <th>Predicted Price</th>
+                    <th>Actual Price</th>
+                    <th>Created At</th>
+                    <th>Select</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for prediction in predictions %}
+                <tr>
+                    <td>{{ prediction.symbol }}</td>
+                    <td>{{ prediction.prediction_date }}</td>
+                    <td>{{ prediction.predicted_price }}</td>
+                    <td>{{ prediction.actual_price }}</td>
+                    <td>{{ prediction.created_at }}</td>
+                    <td>
+                        <div class="dropdown">
+                            <button class="btn btn-primary dropdown-toggle" type="button" id="dropdownMenuButtonPrediction{{ prediction.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                                Select
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdownMenuButtonPrediction{{ prediction.id }}">
+                                <li><a class="dropdown-item" href="/report/prediction/{{ prediction.symbol }}/pdf/">Download PDF</a></li>
+                            </ul>
+                        </div>
+                    </td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="6">No predictions found.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Pagination for predictions -->
+        <nav aria-label="Page navigation">
+            <ul class="pagination">
+                {% if predictions.has_previous %}
+                    <li class="page-item"><a class="page-link" href="?page={{ predictions.previous_page_number }}">Previous</a></li>
+                {% endif %}
+                <li class="page-item disabled"><span class="page-link">Page {{ predictions.number }} of {{ predictions.paginator.num_pages }}</span></li>
+                {% if predictions.has_next %}
+                    <li class="page-item"><a class="page-link" href="?page={{ predictions.next_page_number }}">Next</a></li>
+                {% endif %}
+            </ul>
+        </nav>
     </div>
 </div>
+
 {% endblock %}

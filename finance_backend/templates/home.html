@@ -1,15 +1,86 @@
-<!-- templates/home.html -->
-
 {% extends 'base.html' %}
 
 {% block title %}Home - FinanceApp{% endblock %}
 
 {% block content %}
-<div class="jumbotron text-center">
-    <h1 class="display-4">Welcome to FinanceApp</h1>
-    <p class="lead">Analyze stock data, perform backtesting, make predictions, and generate insightful reports.</p>
-    <hr class="my-4">
-    <p>Get started by fetching stock data or exploring other features.</p>
-    <a class="btn btn-primary btn-lg" href="{% url 'fetch_stock_data' %}" role="button">Fetch Stock Data</a>
+
+<div class="container mt-5">
+    <div class="row">
+        <!-- Stock Data Section -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Fetch Stock Data
+                </div>
+                <div class="card-body">
+                    <p>Fetch the latest stock data and analyze trends.</p>
+                    <a class="btn btn-success" href="{% url 'frontend:fetch_stock' %}">Fetch Stock Data</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Backtests Section -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Recent Backtests
+                </div>
+                <div class="card-body">
+                    <p>View the latest backtests you’ve performed.</p>
+                    <a class="btn btn-info" href="{% url 'frontend:backtest' %}">View Backtests</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Predictions Section -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Predictions
+                </div>
+                <div class="card-body">
+                    <p>Check the latest stock price predictions.</p>
+                    <a class="btn btn-warning" href="{% url 'frontend:predictions' %}">View Predictions</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Reports Section -->
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Reports
+                </div>
+                <div class="card-body">
+                    <p>Generate detailed reports for your analyses.</p>
+                    <a class="btn btn-dark" href="{% url 'frontend:reports' %}">Generate Reports</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stock Market Overview -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card mb-4">
+                <div class="card-header">
+                    Stock Market Overview
+                </div>
+                <div class="card-body">
+                    <p>Stay up-to-date with the latest stock market data:</p>
+                    <!-- Example Stock Overview. You can dynamically populate this data using APIs. -->
+                    <ul class="list-group">
+                        <li class="list-group-item">AAPL: $145.00 <span class="badge bg-success">+1.5%</span></li>
+                        <li class="list-group-item">TSLA: $730.50 <span class="badge bg-danger">-2.1%</span></li>
+                        <li class="list-group-item">AMZN: $3,450.75 <span class="badge bg-success">+0.9%</span></li>
+                        <li class="list-group-item">MSFT: $280.00 <span class="badge bg-success">+0.7%</span></li>
+                    </ul>
+                    <a href="{% url 'frontend:fetch_stock' %}" class="btn btn-primary mt-3">Fetch Latest Data</a>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

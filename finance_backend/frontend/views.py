@@ -9,6 +9,10 @@ from django.urls import reverse
 from django.http import HttpResponse, Http404
 import json
 from .forms import FetchStockForm, BacktestForm, PredictionForm
+from backtesting.models import Backtest
+from predictions.models import Prediction
+from django.core.paginator import Paginator
+
 
 def home(request):
     return render(request, 'home.html')
@@ -76,3 +80,29 @@ def predictions_view(request):
             except Exception as e:
                 messages.error(request, f"Error generating predictions: {str(e)}")
     return render(request, 'predictions.html', {'form': form, 'predictions': predictions})
+
+
+
+def reports_view(request):
+    # Backtest search and pagination
+    backtest_search_query = request.GET.get('backtest_search', '')
+    backtests = Backtest.objects.filter(symbol__icontains=backtest_search_query).order_by('-created_at')
+    
+    paginator_backtest = Paginator(backtests, 10)  # Show 10 backtests per page
+    page_number_backtest = request.GET.get('page_backtest')
+    page_backtests = paginator_backtest.get_page(page_number_backtest)
+
+    # Prediction search and pagination
+    prediction_search_query = request.GET.get('prediction_search', '')
+    predictions = Prediction.objects.filter(symbol__icontains=prediction_search_query).order_by('-created_at')
+
+    paginator_prediction = Paginator(predictions, 10)  # Show 10 predictions per page
+    page_number_prediction = request.GET.get('page_prediction')
+    page_predictions = paginator_prediction.get_page(page_number_prediction)
+
+    context = {
+        'backtests': page_backtests,
+        'predictions': page_predictions,
+    }
+
+    return render(request, 'reports.html', context)

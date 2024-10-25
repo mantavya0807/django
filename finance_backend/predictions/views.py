@@ -1,8 +1,4 @@
 from django.shortcuts import render
-
-# Create your views here.
-# predictions/views.py
-
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
@@ -34,4 +30,10 @@ class PredictionCreateView(APIView):
         # Retrieve the latest predictions
         predictions = Prediction.objects.filter(symbol=symbol).order_by('-prediction_date')[:days]
         serializer = PredictionSerializer(predictions, many=True)
-        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+        # Instead of returning a JSON response, we render the result using a template
+        context = {
+            'predictions': predictions,
+            'symbol': symbol
+        }
+        return render(request, 'predictions_result.html', context)

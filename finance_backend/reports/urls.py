@@ -8,7 +8,7 @@ from .views import (
 )
 
 urlpatterns = [
-    path('backtest/<int:backtest_id>/report/pdf/', BacktestReportPDFView.as_view(), name='backtest-report-pdf'),
-    path('backtest/<int:backtest_id>/report/json/', BacktestReportJSONView.as_view(), name='backtest-report-json'),
-    path('prediction/<str:symbol>/report/pdf/', PredictionReportPDFView.as_view(), name='prediction-report-pdf'),
+    path('report/backtest/<int:backtest_id>/pdf/', BacktestReportPDFView.as_view(), name='backtest-report-pdf'),
+    path('report/backtest/<int:backtest_id>/json/', BacktestReportJSONView.as_view(), name='backtest-report-json'),
+    path('report/prediction/<str:symbol>/pdf/', PredictionReportPDFView.as_view(), name='prediction-report-pdf'),
 ]
