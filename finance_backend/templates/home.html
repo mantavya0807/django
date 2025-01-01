@@ -1,20 +1,304 @@
 {% extends 'base.html' %}
 
+{% load static %}
+
 {% block title %}Home - FinanceApp{% endblock %}
 
 {% block content %}
+<!-- Custom Styles for Enhanced Readability and Clean Design -->
+<style>
+    /* Import Google Fonts */
+    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
+    /* Root Variables for Theme Colors */
+    :root {
+        --primary-color: #2c3e50; /* Dark Blue */
+        --secondary-color: #ecf0f1; /* Light Gray */
+        --accent-color: #3498db; /* Blue */
+        --button-color: #e74c3c; /* Red */
+        --text-color: #2c3e50; /* Dark Blue */
+        --background-color: #ffffff; /* White */
+        --card-background: #f9f9f9; /* Very Light Gray */
+        --header-font: 'Roboto', sans-serif;
+        --body-font: 'Roboto', sans-serif;
+    }
+
+    /* Global Styles */
+    body {
+        font-family: var(--body-font);
+        background-color: var(--background-color);
+        color: var(--text-color);
+        margin: 0;
+        padding: 0;
+    }
+
+    h1, h2, h3, h4, h5, h6 {
+        font-family: var(--header-font);
+        color: var(--primary-color);
+    }
+
+    /* Navbar Styling */
+    .navbar {
+        background-color: var(--primary-color) !important;
+    }
+
+    .navbar-brand {
+        color: var(--secondary-color) !important;
+        font-weight: 700;
+        font-size: 1.5rem;
+    }
+
+    .nav-link {
+        color: var(--secondary-color) !important;
+        font-weight: 500;
+        transition: color 0.3s;
+    }
+
+    .nav-link:hover {
+        color: var(--accent-color) !important;
+    }
+
+    /* Card Styling */
+    .card {
+        background-color: var(--card-background);
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-header {
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+        border-top-left-radius: 10px;
+        border-top-right-radius: 10px;
+        font-weight: 700;
+        font-size: 1.2rem;
+    }
+
+    .card-body {
+        text-align: center;
+        padding: 2rem;
+    }
+
+    .card-body i {
+        font-size: 2.5rem;
+        color: var(--accent-color);
+        margin-bottom: 1rem;
+    }
+
+    .card-body p {
+        font-size: 1rem;
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-fetch {
+        background-color: var(--accent-color);
+        border: none;
+        color: #ffffff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .btn-fetch:hover {
+        background-color: #2980b9;
+        transform: scale(1.05);
+    }
+
+    .btn-view {
+        background-color: var(--button-color);
+        border: none;
+        color: #ffffff;
+        padding: 0.75rem 1.5rem;
+        border-radius: 5px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s, transform 0.3s;
+    }
+
+    .btn-view:hover {
+        background-color: #c0392b;
+        transform: scale(1.05);
+    }
+
+    /* Stock Market Overview Styling */
+    .stock-overview {
+        background-color: var(--card-background);
+        padding: 2rem;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s, box-shadow 0.3s;
+        margin-top: 2rem;
+    }
+
+    .stock-overview:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .stock-overview h3 {
+        color: var(--primary-color);
+        margin-bottom: 1.5rem;
+    }
+
+    .stock-overview ul {
+        list-style: none;
+        padding: 0;
+    }
+
+    .stock-overview li {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #ddd;
+        transition: background-color 0.3s;
+    }
+
+    .stock-overview li:last-child {
+        border-bottom: none;
+    }
+
+    .stock-overview li:hover {
+        background-color: #f1f1f1;
+    }
+
+    .badge-success {
+        background-color: #28a745;
+        color: #ffffff;
+    }
+
+    .badge-danger {
+        background-color: #dc3545;
+        color: #ffffff;
+    }
+
+    .badge-warning {
+        background-color: #ffc107;
+        color: #ffffff;
+    }
+
+    /* Footer Styling */
+    .footer {
+        background-color: var(--primary-color);
+        color: var(--secondary-color);
+        padding: 2rem 0;
+        margin-top: 4rem;
+    }
+
+    .footer a {
+        color: var(--secondary-color);
+        text-decoration: none;
+        transition: color 0.3s;
+    }
+
+    .footer a:hover {
+        color: var(--accent-color);
+    }
+
+    .footer hr {
+        border-color: rgba(255, 255, 255, 0.2);
+    }
+
+    .footer .social-icons a {
+        margin-right: 1rem;
+        font-size: 1.5rem;
+        color: var(--secondary-color);
+        transition: color 0.3s;
+    }
+
+    .footer .social-icons a:hover {
+        color: var(--accent-color);
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+        .card-body i {
+            font-size: 2rem;
+        }
+
+        .btn-fetch, .btn-view {
+            width: 100%;
+            padding: 0.5rem 1rem;
+            font-size: 0.9rem;
+        }
+
+        .stock-overview {
+            padding: 1.5rem;
+        }
+
+        .stock-overview li {
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .stock-overview li span {
+            margin-top: 0.5rem;
+        }
+    }
+
+    /* Additional Styling for Fun Elements */
+    .floating-icon {
+        position: fixed;
+        z-index: -1;
+        opacity: 0.05;
+        animation: float 30s infinite;
+    }
+
+    @keyframes float {
+        0% { transform: translateY(0) rotate(0deg); }
+        50% { transform: translateY(-100px) rotate(180deg); }
+        100% { transform: translateY(0) rotate(360deg); }
+    }
+
+    .floating-icon-1 {
+        top: 10%;
+        left: 5%;
+        font-size: 8rem;
+        color: var(--accent-color);
+    }
+
+    .floating-icon-2 {
+        bottom: 10%;
+        right: 5%;
+        font-size: 6rem;
+        color: var(--button-color);
+    }
+
+    /* Smooth Scroll Behavior */
+    html {
+        scroll-behavior: smooth;
+    }
+</style>
+
+<!-- Floating Icons for Visual Enhancement -->
+<i class="fas fa-chart-line floating-icon floating-icon-1"></i>
+<i class="fas fa-dollar-sign floating-icon floating-icon-2"></i>
+
+<!-- Bootstrap Icons CDN -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-ku1MnyKJcHcR20OikVvKWjSDZB3b3E+UJoS8Nk8kY8oWdPmEm+cyrRgT0qlmxA+Ol3Ml1J/OaG6tuEu2oMk7ow==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+<!-- Home Page Content -->
 <div class="container mt-5">
     <div class="row">
         <!-- Stock Data Section -->
         <div class="col-md-6">
             <div class="card mb-4">
                 <div class="card-header">
-                    Fetch Stock Data
+                    Stock Data
                 </div>
                 <div class="card-body">
+                    <i class="fas fa-chart-bar"></i>
                     <p>Fetch the latest stock data and analyze trends.</p>
-                    <a class="btn btn-success" href="{% url 'frontend:fetch_stock' %}">Fetch Stock Data</a>
+                    <a class="btn-fetch" href="{% url 'frontend:fetch_stock' %}">Fetch Stock Data</a>
                 </div>
             </div>
         </div>
@@ -26,8 +310,9 @@
                     Recent Backtests
                 </div>
                 <div class="card-body">
+                    <i class="fas fa-flask"></i>
                     <p>View the latest backtests you’ve performed.</p>
-                    <a class="btn btn-info" href="{% url 'frontend:backtest' %}">View Backtests</a>
+                    <a class="btn-view" href="{% url 'frontend:backtest' %}">View Backtests</a>
                 </div>
             </div>
         </div>
@@ -41,8 +326,9 @@
                     Predictions
                 </div>
                 <div class="card-body">
+                    <i class="fas fa-binoculars"></i>
                     <p>Check the latest stock price predictions.</p>
-                    <a class="btn btn-warning" href="{% url 'frontend:predictions' %}">View Predictions</a>
+                    <a class="btn-fetch" href="{% url 'frontend:predictions' %}">View Predictions</a>
                 </div>
             </div>
         </div>
@@ -54,8 +340,9 @@
                     Reports
                 </div>
                 <div class="card-body">
+                    <i class="fas fa-file-alt"></i>
                     <p>Generate detailed reports for your analyses.</p>
-                    <a class="btn btn-dark" href="{% url 'frontend:reports' %}">Generate Reports</a>
+                    <a class="btn-view" href="{% url 'frontend:reports' %}">Generate Reports</a>
                 </div>
             </div>
         </div>
@@ -64,23 +351,70 @@
     <!-- Stock Market Overview -->
     <div class="row">
         <div class="col-md-12">
-            <div class="card mb-4">
-                <div class="card-header">
-                    Stock Market Overview
-                </div>
-                <div class="card-body">
-                    <p>Stay up-to-date with the latest stock market data:</p>
-                    <!-- Example Stock Overview. You can dynamically populate this data using APIs. -->
-                    <ul class="list-group">
-                        <li class="list-group-item">AAPL: $145.00 <span class="badge bg-success">+1.5%</span></li>
-                        <li class="list-group-item">TSLA: $730.50 <span class="badge bg-danger">-2.1%</span></li>
-                        <li class="list-group-item">AMZN: $3,450.75 <span class="badge bg-success">+0.9%</span></li>
-                        <li class="list-group-item">MSFT: $280.00 <span class="badge bg-success">+0.7%</span></li>
-                    </ul>
-                    <a href="{% url 'frontend:fetch_stock' %}" class="btn btn-primary mt-3">Fetch Latest Data</a>
-                </div>
+            <div class="stock-overview">
+                <h3>Stock Market Overview</h3>
+                <!-- Example Stock Overview. You can dynamically populate this data using APIs. -->
+                <ul class="list-group">
+                    <li class="list-group-item">
+                        <span>AAPL: $145.00</span>
+                        <span class="badge badge-success">+1.5%</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span>TSLA: $730.50</span>
+                        <span class="badge badge-danger">-2.1%</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span>AMZN: $3,450.75</span>
+                        <span class="badge badge-success">+0.9%</span>
+                    </li>
+                    <li class="list-group-item">
+                        <span>MSFT: $280.00</span>
+                        <span class="badge badge-success">+0.7%</span>
+                    </li>
+                </ul>
+                <a href="{% url 'frontend:fetch_stock' %}" class="btn-fetch mt-3">Fetch Latest Data</a>
             </div>
         </div>
     </div>
 </div>
+
+<!-- Footer Section -->
+<footer class="footer">
+    <div class="container">
+        <div class="row">
+            <!-- About FinanceApp -->
+            <div class="col-md-4">
+                <h5 class="fw-bold">FinanceApp</h5>
+                <p>Your one-stop solution for comprehensive financial analysis and stock market insights. Empowering investors with the tools and data needed to make informed decisions.</p>
+            </div>
+            <!-- Quick Links -->
+            <div class="col-md-4">
+                <h5 class="fw-bold">Quick Links</h5>
+                <ul class="list-unstyled">
+                    <li><a href="{% url 'frontend:fetch_stock' %}">Fetch Stock Data</a></li>
+                    <li><a href="{% url 'frontend:backtest' %}">Recent Backtests</a></li>
+                    <li><a href="{% url 'frontend:predictions' %}">Predictions</a></li>
+                    <li><a href="{% url 'frontend:reports' %}">Reports</a></li>
+                </ul>
+            </div>
+            <!-- Contact Information -->
+            <div class="col-md-4">
+                <h5 class="fw-bold">Contact Us</h5>
+                <p>Email: support@financeapp.com</p>
+                <p>Phone: +1 (234) 567-8901</p>
+                <p>Address: 123 Finance Street, Money City, FC 45678</p>
+                <div class="social-icons mt-3">
+                    <a href="#"><i class="fab fa-facebook-f"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr>
+        <div class="text-center">
+            &copy; {{ now.year }} FinanceApp. All rights reserved.
+        </div>
+    </div>
+</footer>
 {% endblock %}
